@@ -33,83 +33,61 @@
             align-items: center;
         }
 
-        /* Динамический фон с туманностями */
+        /* Анимированный космический фон */
         .universe-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(157, 80, 187, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(110, 127, 243, 0.1) 0%, transparent 40%),
-                #050212;
+            background: radial-gradient(circle at 50% 50%, #1a0b3d 0%, #050212 100%);
             overflow: hidden;
         }
 
         .nebula {
             position: absolute;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(157, 80, 187, 0.05) 0%, transparent 70%);
-            filter: blur(50px);
-            animation: drift 20s infinite alternate ease-in-out;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(157, 80, 187, 0.15) 0%, transparent 70%);
+            filter: blur(60px);
+            animation: drift 25s infinite alternate ease-in-out;
         }
 
         @keyframes drift {
-            from { transform: translate(-10%, -10%) scale(1); }
-            to { transform: translate(20%, 20%) scale(1.2); }
+            from { transform: translate(-20%, -20%) rotate(0deg); }
+            to { transform: translate(30%, 30%) rotate(180deg); }
         }
 
-        .stars-overlay {
+        .stars {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            width: 100%; height: 100%;
             background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.4;
-            animation: twinkle 5s infinite;
+            opacity: 0.3;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Контент */
         header {
             text-align: center;
-            padding: 50px 20px;
-            z-index: 10;
+            padding: 60px 20px 30px;
         }
 
         h1 {
             font-family: 'Cinzel', serif;
-            font-size: clamp(2rem, 8vw, 3rem);
-            letter-spacing: 6px;
+            font-size: clamp(2rem, 10vw, 3.5rem);
+            letter-spacing: 8px;
             background: linear-gradient(to bottom, #fff, var(--accent-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
-            filter: drop-shadow(0 0 10px rgba(226, 176, 83, 0.3));
         }
 
-        .subtitle {
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            opacity: 0.6;
-            font-weight: 300;
-        }
-
+        /* Сетка знаков */
         .container {
             width: 100%;
             max-width: 600px;
-            padding: 0 20px 50px;
-            z-index: 10;
+            padding: 0 20px 40px;
         }
 
-        /* Сетка с анимацией появления */
         .zodiac-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin-top: 20px;
         }
 
         .zodiac-card {
@@ -131,64 +109,67 @@
         }
 
         .zodiac-card:hover {
-            background: rgba(255, 255, 255, 0.08);
             border-color: var(--accent-gold);
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .zodiac-card.active {
             background: linear-gradient(135deg, rgba(157, 80, 187, 0.2), rgba(110, 127, 243, 0.2));
             border-color: var(--neon-blue);
-            box-shadow: 0 0 25px rgba(110, 127, 243, 0.3);
+            box-shadow: 0 0 30px rgba(110, 127, 243, 0.3);
         }
 
-        .zodiac-glyph {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, var(--accent-gold), #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: block;
+        .zodiac-svg {
+            width: 45px;
+            height: 45px;
+            margin-bottom: 15px;
+            fill: var(--accent-gold);
+            filter: drop-shadow(0 0 8px rgba(226, 176, 83, 0.4));
+            transition: 0.3s;
+        }
+
+        .zodiac-card:hover .zodiac-svg {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .zodiac-name {
-            font-size: 0.8rem;
+            display: block;
+            font-size: 0.85rem;
             font-weight: 600;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.9);
         }
 
-        /* Главная кнопка */
-        .btn-container {
-            position: sticky;
-            bottom: 20px;
-            margin-top: 30px;
+        /* Кнопка */
+        .btn-wrap {
+            margin-top: 40px;
             padding: 0 10px;
         }
 
         .main-btn {
             width: 100%;
-            padding: 20px;
+            padding: 22px;
             border-radius: 100px;
             border: none;
             background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
             color: white;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
+            font-size: 1rem;
             letter-spacing: 2px;
             cursor: pointer;
             box-shadow: 0 10px 40px rgba(157, 80, 187, 0.4);
-            transition: 0.3s;
+            transition: transform 0.2s;
         }
 
-        .main-btn:active { transform: scale(0.95); }
+        .main-btn:active { transform: scale(0.96); }
 
-        /* Оверлей загрузки и результата */
+        /* Оверлей */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 2, 18, 0.95);
+            background: rgba(5, 2, 18, 0.98);
             z-index: 100;
             display: none;
             flex-direction: column;
@@ -198,17 +179,17 @@
             backdrop-filter: blur(20px);
         }
 
-        .loader-bar {
+        .progress-container {
             width: 100%;
-            max-width: 250px;
-            height: 3px;
+            max-width: 280px;
+            height: 4px;
             background: rgba(255,255,255,0.1);
             border-radius: 10px;
             margin-top: 30px;
             overflow: hidden;
         }
 
-        .progress {
+        .bar {
             width: 0%;
             height: 100%;
             background: var(--accent-gold);
@@ -216,37 +197,36 @@
             transition: width 0.1s linear;
         }
 
-        .result-card {
+        .result-view {
             display: none;
             text-align: center;
-            max-width: 450px;
-            animation: fadeIn 1s ease forwards;
+            max-width: 500px;
+            animation: slideUp 0.8s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .result-text {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             line-height: 1.8;
             font-weight: 300;
-            color: rgba(255,255,255,0.9);
-            margin: 30px 0;
+            margin: 30px 0 40px;
+            color: #ddd;
         }
 
         .back-btn {
             background: transparent;
             border: 1px solid var(--accent-gold);
             color: var(--accent-gold);
-            padding: 15px 40px;
+            padding: 16px 45px;
             border-radius: 100px;
             cursor: pointer;
             text-transform: uppercase;
             font-size: 0.8rem;
             letter-spacing: 2px;
-            transition: 0.3s;
         }
 
         .back-btn:hover {
@@ -258,70 +238,68 @@
 <body>
 
     <div class="universe-bg">
-        <div class="nebula" style="top: 10%; left: 10%;"></div>
-        <div class="nebula" style="bottom: 10%; right: 10%; animation-delay: -5s;"></div>
-        <div class="stars-overlay"></div>
+        <div class="nebula" style="top: -10%; left: -10%;"></div>
+        <div class="nebula" style="bottom: -10%; right: -10%; animation-delay: -7s;"></div>
+        <div class="stars"></div>
     </div>
 
     <header>
         <h1>ASTROGEN</h1>
-        <p class="subtitle">Personal AI Astrologist</p>
+        <p style="text-transform: uppercase; letter-spacing: 4px; font-size: 0.7rem; opacity: 0.5;">Personal AI Universe</p>
     </header>
 
     <div class="container">
-        <div class="zodiac-grid" id="zodiacGrid">
-            <!-- JS dynamic content -->
-        </div>
-        <div class="btn-container">
-            <button class="main-btn" id="generateBtn">ПОЛУЧИТЬ ГОРОСКОП</button>
+        <div class="zodiac-grid" id="zGrid"></div>
+        <div class="btn-wrap">
+            <button class="main-btn" id="genBtn">ПОЛУЧИТЬ ГОРОСКОП</button>
         </div>
     </div>
 
-    <div class="overlay" id="appOverlay">
+    <!-- Overlay UI -->
+    <div class="overlay" id="mainOverlay">
         <div id="loaderUI" style="text-align: center;">
-            <h2 id="statusText" style="font-family: 'Cinzel'; letter-spacing: 3px;">Чтение судеб...</h2>
-            <div class="loader-bar"><div class="progress" id="progressLine"></div></div>
+            <h2 id="stText" style="font-family: 'Cinzel'; letter-spacing: 4px;">Синхронизация...</h2>
+            <div class="progress-container"><div class="bar" id="pBar"></div></div>
         </div>
 
-        <div class="result-card" id="resultUI">
-            <span class="zodiac-glyph" id="resIcon" style="font-size: 4rem;"></span>
-            <h2 id="resName" style="font-family: 'Cinzel'; color: var(--accent-gold); font-size: 2rem;"></h2>
-            <p class="result-text" id="resText"></p>
-            <button class="back-btn" onclick="closeOverlay()">Вернуться</button>
+        <div class="result-view" id="resUI">
+            <div id="resIconBox" style="margin-bottom: 20px;"></div>
+            <h2 id="resName" style="font-family: 'Cinzel'; color: var(--accent-gold); font-size: 2.2rem;"></h2>
+            <p class="result-text" id="resMsg"></p>
+            <button class="back-btn" onclick="closeApp()">Вернуться</button>
         </div>
     </div>
 
     <script>
         const signs = [
-            { name: 'Овен', symbol: '♈', id: 'aries' },
-            { name: 'Телец', symbol: '♉', id: 'taurus' },
-            { name: 'Близнецы', symbol: '♊', id: 'gemini' },
-            { name: 'Рак', symbol: '♋', id: 'cancer' },
-            { name: 'Лев', symbol: '♌', id: 'leo' },
-            { name: 'Дева', symbol: '♍', id: 'virgo' },
-            { name: 'Весы', symbol: '♎', id: 'libra' },
-            { name: 'Скорпион', symbol: '♏', id: 'scorpio' },
-            { name: 'Стрелец', symbol: '♐', id: 'sagittarius' },
-            { name: 'Козерог', symbol: '♑', id: 'capricorn' },
-            { name: 'Водолей', symbol: '♒', id: 'aquarius' },
-            { name: 'Рыбы', symbol: '♓', id: 'pisces' }
+            { name: 'Овен', svg: '<path d="M21.1,5.1c-1.3-1.3-3.1-2.1-5.1-2.1c-4,0-7.2,3.2-7.2,7.2v2.4h2.4v-2.4c0-2.7,2.2-4.8,4.8-4.8c1.3,0,2.5,0.5,3.4,1.4c0.9,0.9,1.4,2.1,1.4,3.4c0,2.7-2.2,4.8-4.8,4.8h-2.4v2.4h2.4c4,0,7.2-3.2,7.2-7.2C23.2,8.2,22.4,6.4,21.1,5.1z M2.9,5.1C1.6,6.4,0.8,8.2,0.8,10.2c0,4,3.2,7.2,7.2,7.2h2.4v-2.4H8c-2.7,0-4.8-2.2-4.8-4.8c0-1.3,0.5-2.5,1.4-3.4C5.5,5.9,6.7,5.4,8,5.4c2.7,0,4.8,2.2,4.8,4.8v2.4h2.4v-2.4c0-4-3.2-7.2-7.2-7.2C6,3,4.2,3.8,2.9,5.1z"/>' },
+            { name: 'Телец', svg: '<path d="M12,23.2c-5,0-9.1-4.1-9.1-9.1c0-4,2.6-7.4,6.2-8.6c-0.8-1-1.3-2.3-1.3-3.7V0.8h2.4v1.1c0,1.9,1.5,3.4,3.4,3.4s3.4-1.5,3.4-3.4V0.8h2.4v1.1c0,1.4-0.5,2.7-1.3,3.7c3.6,1.2,6.2,4.6,6.2,8.6C21.1,19.1,17,23.2,12,23.2z M12,7.9c-3.7,0-6.7,3-6.7,6.7s3,6.7,6.7,6.7s6.7-3,6.7-6.7S15.7,7.9,12,7.9z"/>' },
+            { name: 'Близнецы', svg: '<path d="M20.8,2.4V0.8H3.2v1.6c1.6,0.5,2.8,2,2.8,3.7v11c0,1.7-1.2,3.2-2.8,3.7v1.6h17.6v-1.6c-1.6-0.5-2.8-2-2.8-3.7v-11C18,4.4,19.2,3,20.8,2.4z M15.6,17.1c0,0.4,0.1,0.8,0.3,1.1H8.1c0.2-0.3,0.3-0.7,0.3-1.1V6.9c0-0.4-0.1-0.8-0.3-1.1h7.8c-0.2,0.3-0.3,0.7-0.3,1.1V17.1z"/>' },
+            { name: 'Рак', svg: '<path d="M16.8,11.2c-2.4,0-4.3,1.9-4.3,4.3c0,2.4,1.9,4.3,4.3,4.3c2.4,0,4.3-1.9,4.3-4.3v-2.4h2.4v2.4c0,3.7-3,6.7-6.7,6.7s-6.7-3-6.7-6.7c0-2,0.9-3.8,2.3-5.1C11,8.6,10.1,6.8,10.1,4.8c0-3.7,3-6.7,6.7-6.7s6.7,3,6.7,6.7c0,2.4-1.9,4.3-4.3,4.3s-4.3-1.9-4.3-4.3V2.4h-2.4v2.4C12.5,7.2,14.4,9.1,16.8,9.1s4.3,1.9,4.3,4.3V11.2z M2.9,13.3c0-3.7,3-6.7,6.7-6.7h2.4v2.4H9.6c-2.4,0-4.3,1.9-4.3,4.3c0,2.4,1.9,4.3,4.3,4.3c2.4,0,4.3-1.9,4.3-4.3v-2.4h2.4v2.4c0,3.7-3,6.7-6.7,6.7S2.9,17.1,2.9,13.3z"/>' },
+            { name: 'Лев', svg: '<path d="M19.1,12c-2,0-3.6,1.6-3.6,3.6c0,2,1.6,3.6,3.6,3.6c2,0,3.6-1.6,3.6-3.6V12h2.4v3.6c0,3.3-2.7,6-6,6s-6-2.7-6-6c0-2,1-3.8,2.5-4.9c-1.3-1.2-2.1-2.9-2.1-4.7c0-3.7,3-6.7,6.7-6.7s6.7,3,6.7,6.7v0.6h-2.4V4.4c0-2.4-1.9-4.3-4.3-4.3s-4.3,1.9-4.3,4.3c0,1.9,1.2,3.5,2.9,4.1c1-0.9,2.4-1.5,3.8-1.5c3,0,5.4,2.4,5.4,5.4V12.6z M2.9,14.4c0-2.7,2.2-4.8,4.8-4.8c2.7,0,4.8,2.2,4.8,4.8s-2.2,4.8-4.8,4.8S2.9,17,2.9,14.4z"/>' },
+            { name: 'Дева', svg: '<path d="M23.2,12.4c0,6-4.8,10.8-10.8,10.8S1.6,18.4,1.6,12.4S6.4,1.6,12.4,1.6S23.2,6.4,23.2,12.4z M4,12.4c0,4.6,3.8,8.4,8.4,8.4s8.4-3.8,8.4-8.4s-3.8-8.4-8.4-8.4S4,7.8,4,12.4z"/>' },
+            { name: 'Весы', svg: '<path d="M23.2,17.2v2.4H0.8v-2.4h22.4z M12,12.4c-2.4,0-4.3-1.9-4.3-4.3c0-2.4,1.9-4.3,4.3-4.3s4.3,1.9,4.3,4.3C16.3,10.5,14.4,12.4,12,12.4z M12,6.1c-1,0-1.9,0.9-1.9,1.9s0.9,1.9,1.9,1.9s1.9-0.9,1.9-1.9S13,6.1,12,6.1z"/>' },
+            { name: 'Скорпион', svg: '<path d="M20.8,16.8c0,2.2-1.8,4-4,4s-4-1.8-4-4V7.2c0-1.3-1.1-2.4-2.4-2.4s-2.4,1.1-2.4,2.4v9.6H5.6V7.2c0-1.3-1.1-2.4-2.4-2.4S0.8,5.9,0.8,7.2v9.6h2.4V7.2c0-2.7,2.2-4.8,4.8-4.8s4.8,2.2,4.8,4.8v9.6c0,1.3,1.1,2.4,2.4,2.4s2.4-1.1,2.4-2.4v-4.8h2.4V16.8z"/>' },
+            { name: 'Стрелец', svg: '<path d="M22.1,1.9l-9.6,9.6l-1.7-1.7l9.6-9.6L22.1,1.9z M13.3,1.6v2.4H19l-4.8,4.8l1.7,1.7l4.8-4.8v5.7h2.4V1.6H13.3z M2.7,19.5l1.7,1.7l-2.5,2.5L0.2,22L2.7,19.5z"/>' },
+            { name: 'Козерог', svg: '<path d="M20.8,12c-1.3,0-2.4,1.1-2.4,2.4v2.4c0,2.7-2.2,4.8-4.8,4.8s-4.8-2.2-4.8-4.8V7.2c0-2.7,2.2-4.8,4.8-4.8s4.8,2.2,4.8,4.8v2.4h-2.4V7.2c0-1.3-1.1-2.4-2.4-2.4s-2.4,1.1-2.4,2.4v9.6c0,1.3,1.1,2.4,2.4,2.4s2.4-1.1,2.4-2.4v-2.4c0-2.7,2.2-4.8,4.8-4.8h2.4V12z"/>' },
+            { name: 'Водолей', svg: '<path d="M23.2,8.4l-3.6,3.6l-3.6-3.6l-3.6,3.6L8.8,8.4L5.2,12L1.6,8.4L0,10.1l5.2,5.2l3.6-3.6l3.6,3.6l3.6-3.6l3.6,3.6l5.2-5.2L23.2,8.4z"/>' },
+            { name: 'Рыбы', svg: '<path d="M23.2,12.4c0,6-4.8,10.8-10.8,10.8S1.6,18.4,1.6,12.4S6.4,1.6,12.4,1.6S23.2,6.4,23.2,12.4z M12.4,4c-4.6,0-8.4,3.8-8.4,8.4s3.8,8.4,8.4,8.4s8.4-3.8,8.4-8.4S17,4,12.4,4z M20.8,11.2v2.4H4v-2.4H20.8z"/>' }
         ];
 
         const quotes = [
-            "Сегодня Вселенная на вашей стороне. Ваша энергия притягивает правильных людей. Будьте открыты для предложений, которые кажутся безумными на первый взгляд.",
-            "Звезды советуют замедлиться. То, что вы ищете, уже рядом с вами. Вечер принесет важное осознание в личной жизни.",
-            "Мощный прилив творческой энергии! Идеальное время, чтобы заявить о себе. Финансовые вопросы решатся легче, чем обычно."
+            "Сегодня звезды благоволят вашим начинаниям. Энергия планет поможет найти выход из сложной ситуации. Доверьтесь интуиции.",
+            "Наступает время перемен. ИИ предсказывает удачу в финансовых делах, если вы проявите решительность. Вечер будет спокойным.",
+            "Вселенная требует от вас внимания к деталям. Важные новости придут оттуда, откуда вы их совсем не ждете."
         ];
 
         let selected = null;
 
-        // Генерация карточек
-        const grid = document.getElementById('zodiacGrid');
-        signs.forEach((s, index) => {
+        const grid = document.getElementById('zGrid');
+        signs.forEach((s, i) => {
             const card = document.createElement('div');
             card.className = 'zodiac-card';
             card.innerHTML = `
-                <span class="zodiac-glyph">${s.symbol}</span>
+                <svg class="zodiac-svg" viewBox="0 0 24 24">${s.svg}</svg>
                 <span class="zodiac-name">${s.name}</span>
             `;
             card.onclick = () => {
@@ -330,47 +308,45 @@
                 selected = s;
             };
             grid.appendChild(card);
-            
-            // Плавное появление по очереди
-            setTimeout(() => card.classList.add('reveal'), index * 100);
+            setTimeout(() => card.classList.add('reveal'), i * 80);
         });
 
-        document.getElementById('generateBtn').onclick = () => {
-            if (!selected) return alert("Выберите свой знак");
+        document.getElementById('genBtn').onclick = () => {
+            if (!selected) return alert("Выберите знак зодиака");
             
-            const overlay = document.getElementById('appOverlay');
+            const overlay = document.getElementById('mainOverlay');
             const loader = document.getElementById('loaderUI');
-            const result = document.getElementById('resultUI');
-            const prog = document.getElementById('progressLine');
-            const status = document.getElementById('statusText');
+            const result = document.getElementById('resUI');
+            const bar = document.getElementById('pBar');
+            const status = document.getElementById('stText');
 
             overlay.style.display = 'flex';
             loader.style.display = 'block';
             result.style.display = 'none';
+            bar.style.width = '0%';
             
             let w = 0;
-            const timer = setInterval(() => {
+            const step = 100; // ms
+            const interval = setInterval(() => {
                 w += 2;
-                prog.style.width = w + '%';
-                if(w === 30) status.innerText = "Анализ положения планет...";
-                if(w === 70) status.innerText = "ИИ формирует прогноз...";
+                bar.style.width = w + '%';
+                if(w === 40) status.innerText = "Расшифровка сигналов...";
+                if(w === 80) status.innerText = "Подготовка ответа...";
                 
                 if (w >= 100) {
-                    clearInterval(timer);
+                    clearInterval(interval);
                     loader.style.display = 'none';
                     result.style.display = 'block';
                     
-                    document.getElementById('resIcon').innerText = selected.symbol;
+                    document.getElementById('resIconBox').innerHTML = `<svg class="zodiac-svg" style="width:70px; height:70px;" viewBox="0 0 24 24">${selected.svg}</svg>`;
                     document.getElementById('resName').innerText = selected.name;
-                    document.getElementById('resText').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+                    document.getElementById('resMsg').innerText = quotes[Math.floor(Math.random() * quotes.length)];
                 }
-            }, 100); // 100ms * 50 steps = 5 seconds
+            }, step);
         };
 
-        function closeOverlay() {
-            document.getElementById('appOverlay').style.display = 'none';
-            // Сбрасываем прогресс-бар для следующего раза
-            document.getElementById('progressLine').style.width = '0%';
+        function closeApp() {
+            document.getElementById('mainOverlay').style.display = 'none';
         }
     </script>
 </body>
