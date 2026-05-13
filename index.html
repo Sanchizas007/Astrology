@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AstroGen — Твой личный ИИ-гороскоп</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0f0524;
+            --accent-gold: #e2b053;
+            --neon-purple: #8a2be2;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(226, 176, 83, 0.05) 0%, transparent 40%);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Анимированный фон со звездами */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            letter-spacing: 4px;
+            color: var(--accent-gold);
+            text-shadow: 0 0 15px rgba(226, 176, 83, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-weight: 300;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* Сетка знаков */
+        .zodiac-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .zodiac-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .zodiac-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .zodiac-card.active {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .zodiac-icon {
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, var(--accent-gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .zodiac-name {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Кнопка */
+        .main-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(45deg, var(--neon-purple), #4b0082);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            margin-top: 10px;
+        }
+
+        .main-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .main-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Модальное окно и прогресс-бар */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-deep);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .loader-container {
+            width: 100%;
+            max-width: 300px;
+            height: 4px;
+            background: var(--glass);
+            border-radius: 10px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--neon-purple));
+            box-shadow: 0 0 10px var(--accent-gold);
+            transition: width 0.1s linear;
+        }
+
+        .horoscope-result {
+            display: none;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .result-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        /* Анимации */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 400px) {
+            .zodiac-grid { gap: 10px; }
+            .zodiac-card { padding: 15px 5px; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <header>
+        <h1>ASTROGEN</h1>
+        <p class="subtitle">Искусственный интеллект читает твои звезды</p>
+    </header>
+
+    <div class="container">
+        <div class="zodiac-grid" id="zodiacGrid">
+            <!-- Генерируется через JS -->
+        </div>
+        <button class="main-btn" id="generateBtn">ПОЛУЧИТЬ ГОРОСКОП</button>
+    </div>
+
+    <!-- Модалка загрузки и результата -->
+    <div class="overlay" id="overlay">
+        <div id="loaderSection">
+            <h2 id="loaderTitle" style="font-family: 'Cinzel'; margin-bottom: 10px;">Анализ созвездий...</h2>
+            <p class="subtitle" id="loaderSub">Синхронизация с энергией планет</p>
+            <div class="loader-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="horoscope-result" id="resultSection">
+            <div class="zodiac-icon" id="resultIcon" style="font-size: 3rem; margin-bottom: 20px;"></div>
+            <h2 id="resultTitle" style="font-family: 'Cinzel'; color: var(--accent-gold); margin-bottom: 20px;">Ваш прогноз</h2>
+            <p class="result-text" id="horoscopeContent"></p>
+            <button class="back-btn" onclick="resetApp()">Вернуться</button>
+        </div>
+    </div>
+
+    <script>
+        const signs = [
+            { name: 'Овен', icon: '♈', dates: '21.03 - 19.04' },
+            { name: 'Телец', icon: '♉', dates: '20.04 - 20.05' },
+            { name: 'Близнецы', icon: '♊', dates: '21.05 - 20.06' },
+            { name: 'Рак', icon: '♋', dates: '21.06 - 22.07' },
+            { name: 'Лев', icon: '♌', dates: '23.07 - 22.08' },
+            { name: 'Дева', icon: '♍', dates: '23.08 - 22.09' },
+            { name: 'Весы', icon: '♎', dates: '23.09 - 22.10' },
+            { name: 'Скорпион', icon: '♏', dates: '23.10 - 21.11' },
+            { name: 'Стрелец', icon: '♐', dates: '22.11 - 21.12' },
+            { name: 'Козерог', icon: '♑', dates: '22.12 - 19.01' },
+            { name: 'Водолей', icon: '♒', dates: '20.01 - 18.02' },
+            { name: 'Рыбы', icon: '♓', dates: '19.02 - 20.03' }
+        ];
+
+        const predictions = [
+            "Сегодня звезды сулят неожиданный поворот. Ваша интуиция обострена — доверьтесь первому импульсу, он приведет к успеху.",
+            "Энергия планет направлена на созидание. Отличное время для завершения старых дел и планирования масштабных целей.",
+            "Космос призывает вас к отдыху. Сегодняшний день лучше провести в гармонии с собой, избегая лишней суеты и шума."
+        ];
+
+        let selectedSign = null;
+
+        // Инициализация сетки
+        const grid = document.getElementById('zodiacGrid');
+        signs.forEach(sign => {
+            const card = document.createElement('div');
+            card.className = 'zodiac-card';
+            card.innerHTML = `
+                <div class="zodiac-icon">${sign.icon}</div>
+                <div class="zodiac-name">${sign.name}</div>
+                <div style="font-size: 0.6rem; opacity: 0.5">${sign.dates}</div>
+            `;
+            card.onclick = () => selectSign(card, sign);
+            grid.appendChild(card);
+        });
+
+        function selectSign(element, sign) {
+            document.querySelectorAll('.zodiac-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            selectedSign = sign;
+        }
+
+        document.getElementById('generateBtn').onclick = () => {
+            if (!selectedSign) {
+                alert('Пожалуйста, выберите ваш знак зодиака');
+                return;
+            }
+            startGeneration();
+        };
+
+        function startGeneration() {
+            const overlay = document.getElementById('overlay');
+            const progress = document.getElementById('progressBar');
+            const loaderTitle = document.getElementById('loaderTitle');
+            
+            overlay.style.display = 'flex';
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    showResult();
+                } else {
+                    width += 2;
+                    progress.style.width = width + '%';
+                    if(width > 40) loaderTitle.innerText = "Чтение звездных карт...";
+                    if(width > 80) loaderTitle.innerText = "Формирование прогноза ИИ...";
+                }
+            }, 100);
+        }
+
+        function showResult() {
+            document.getElementById('loaderSection').style.display = 'none';
+            const resultSection = document.getElementById('resultSection');
+            resultSection.style.display = 'block';
+            
+            document.getElementById('resultIcon').innerText = selectedSign.icon;
+            document.getElementById('resultTitle').innerText = selectedSign.name;
+            
+            // Случайный прогноз
+            const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
+            document.getElementById('horoscopeContent').innerText = randomPrediction;
+        }
+
+        function resetApp() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
